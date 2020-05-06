@@ -68,31 +68,36 @@ enum Genero {
 }
 
 relationship OneToOne {
-    Usuario{user(login)} to User
+    Customer{user} to User
 }
-relationship ManyToOne {
-    TipoLista{padre(nombre)} to TipoLista
-	ElementoLista{tipoLista(nombre) required} to TipoLista
-    ElementoLista{padre(nombre)} to ElementoLista
-    ProductoDetalle{Talla(nombre) required} to ElementoLista
-    ProductoDetalle{Color(nombre) required} to ElementoLista
-    Stock{producto} to Producto
-    Stock{sucursal} to Sucursal
-   // OrderItem{product} to Producto
-}
-// User relationships
-relationship ManyToOne {
-    Usuario{cuidad(nombre) required} to ElementoLista
 
+relationship ManyToOne {
+  OrderItem{producto} to Producto
 }
 
 relationship OneToMany {
-
-   ProductoCategoria{producto} to Producto{productCategoria}
-   Producto{productoDetalle} to ProductoDetalle{producto(nombre)}
-  // ProductoDetalle{stock} to Stock{productoDetalle(codigo)}
-   //Sucursal{productoDetalle} to ProductoDetalle{sucursal(nombre)}
+   Customer{order} to ProductOrder{customer},
+   ProductOrder{orderItem} to OrderItem{order},
+   ProductOrder{invoice} to Invoice{order},
+   Invoice{shipment} to Shipment{invoice},
+   ProductoCategoria{producto} to Producto{ProductoCategoria}
 }
+relationship OneToOne {
+   Customer{user(login)} to User
+}
+
+relationship ManyToOne {
+   OrderItem{producto(name)} to Producto
+}
+
+relationship OneToMany {
+   Customer{order} to ProductOrder{customer(email)},
+   ProductOrder{orderItem} to OrderItem{order(code)},
+   ProductOrder{invoice} to Invoice{order(code)},
+   Invoice{shipment} to Shipment{invoice(code)},
+   ProductoCategoria{producto} to Producto{ProductoCategoria(name)}
+}
+
 
 dto * with mapstruct
 paginate * with pagination

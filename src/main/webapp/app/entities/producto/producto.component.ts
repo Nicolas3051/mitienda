@@ -25,6 +25,8 @@ export class ProductoComponent implements OnInit, OnDestroy {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
+  filter!: string;
+
   constructor(
     protected productoService: ProductoService,
     protected activatedRoute: ActivatedRoute,
