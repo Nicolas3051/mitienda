@@ -6,11 +6,18 @@ import { ProductoComponent } from './producto.component';
 import { ProductoDetailComponent } from './producto-detail.component';
 import { ProductoUpdateComponent } from './producto-update.component';
 import { ProductoDeleteDialogComponent } from './producto-delete-dialog.component';
+import { ProductoAddDialogComponent } from './producto-add-dialog.component';
 import { productoRoute } from './producto.route';
 
 @NgModule({
   imports: [MitiendaSharedModule, RouterModule.forChild(productoRoute)],
-  declarations: [ProductoComponent, ProductoDetailComponent, ProductoUpdateComponent, ProductoDeleteDialogComponent],
-  entryComponents: [ProductoDeleteDialogComponent]
+  declarations: [
+    ProductoComponent,
+    ProductoDetailComponent,
+    ProductoUpdateComponent,
+    ProductoDeleteDialogComponent,
+    ProductoAddDialogComponent
+  ],
+  entryComponents: [ProductoDeleteDialogComponent, ProductoAddDialogComponent]
 })
 export class MitiendaProductoModule {}

@@ -7,6 +7,13 @@
             Create a new Producto
             </span>
         </button>
+
+        <button type="submit" (click)="view( )"
+                    class="btn btn-success btn-sm">
+                    <fa-icon [icon]="'cart-plus'"></fa-icon>
+                    <span class="d-none d-md-inline"> Tu carrito </span>
+                </button>
+
     </h2>
     <jhi-alert-error></jhi-alert-error>
     <jhi-alert></jhi-alert>
@@ -16,55 +23,51 @@
     </div>
     <div *ngIf="productos">
         <div class="mb-2 d-flex justify-content-end align-items-center">
-            <span class="mr-2 col-2">Filter by name</span>
-    <input type="search" class="form-control" [(ngModel)]="filter">
+            <span class="mr-2 col-2">Filtros por nombre</span>
+          <input type="search" class="form-control" [(ngModel)]="filter">
             <span class="mx-2 col-1">Sort by</span>
-            <div class="btn-group" role="group" jhiSort [(predicate)]="predicate"
-            [(ascending)]="reverse" [callback]="loadPage.bind(this)">
+            <div class="btn-group" role="group" jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="loadPage.bind(this)">
+
 
             <button type="button" class="btn btn-light" jhiSortBy="name">
                 <span class="d-flex">
-                  <span jhiTranslate="storeApp.producto.nombre">Name</span>&nbsp;
+                  <span jhiTranslate="mitiendaApp.producto.nombre">Name</span>&nbsp;
                   <fa-icon [icon]="'sort'"></fa-icon>
                 </span>
               </button>
 
-              <button type="button" class="btn btn-light" jhiSortBy="price">
+                   <button type="button" class="btn btn-light" jhiSortBy="price">
                 <span class="d-flex">
-                  <span jhiTranslate="storeApp.product.precioVenta">Price</span>&nbsp;
+                  <span jhiTranslate="mitiendaApp.producto.precioVenta">Price</span>&nbsp;
                   <fa-icon [icon]="'sort'"></fa-icon>
                 </span>
               </button>
 
-              <button type="button" class="btn btn-light" jhiSortBy="size">
+                 <button type="button" class="btn btn-light" jhiSortBy="size">
                 <span class="d-flex">
-                  <span jhiTranslate="storeApp.product.estado">Size</span>&nbsp;
+                  <span jhiTranslate="mitiendaApp.producto.estado">Size</span>&nbsp;
                   <fa-icon [icon]="'sort'"></fa-icon>
                 </span>
               </button>
 
-              <button type="button" class="btn btn-light"
-     jhiSortBy="productoCategoria.id">
+              <button type="button" class="btn btn-light" jhiSortBy="productoCategoriaId">
       <span class="d-flex">
-        <span jhiTranslate="storeApp.producto.productoCategoria">Producto
-          Category</span>&nbsp;
+        <span jhiTranslate="mitiendaApp.producto.productCategoria">Producto Category</span>&nbsp;
         <fa-icon [icon]="'sort'"></fa-icon>
       </span>
     </button>
+
   </div>
-</div>
+  </div>
 
 
           <a class="list-group-item list-group-item-action flex-column
            align-
             items-start"
-            *ngFor="let producto of productos; trackBy: trackId">
+            *ngFor="let producto of (productos | pureFilter:filter:'nombre'); trackBy:trackId" >
             <div class="row">
               <div class="col-2 col-xs-12 justify-content-center">
-                <img [src]="'data:' + producto.imageContentType +
-                 ';base64,' +
-                 producto.image" style="max-height:150px;"
-                 alt="producto image" />
+                <img [src]="'data:' + producto.imageContentType + ';base64,' + producto.image" style="max-height:150px;" alt="producto image" />
                 </div>
                 <div class="col col-xs-12">
 
@@ -80,14 +83,11 @@
               </small>
             </div>
             <small class="mb-1">{{ producto.descripcion }}</small>
-            <p class="mb-1">Price: {{ producto.precioVenta | currency: 'USD'}}</p>
+            <p class="mb-1">Precio: {{ productos.precioVenta | currency: 'USD'}}</p>
             <small>
-                Size:
-          <span jhiTranslate="{{ 'storeApp.Estado.' + producto.estado }}">
-
-
+                Estado:
                 {{ producto.estado }}
-          </span>
+          &nbsp;
 
             </small>
             <div *jhiHasAnyAuthority="'ROLE_ADMIN'">
@@ -100,18 +100,23 @@
               </button>
 
               <button type="submit" (click)="delete(producto)"
-               class="btn btn-
-                danger btn-sm">
+               class="btn btn-danger btn-sm">
                 <fa-icon [icon]="'times'"></fa-icon>
                 <span class="d-none d-md-inline"
                  jhiTranslate="entity.action.delete">Delete</span>
               </button>
+
+              <button type="submit" (click)="add(producto)"
+                    class="btn btn-success btn-sm">
+                    <fa-icon [icon]="'cart-plus'"></fa-icon>
+                    <span class="d-none d-md-inline"> Agregar al carrito </span>
+                </button>
             </div>
         </div>
       </div>
     </a>
   </div>
-</div>
+  </div>
 
     <div *ngIf="productos?.length > 0">
         <div class="row justify-content-center">
@@ -121,4 +126,5 @@
             <ngb-pagination [collectionSize]="totalItems" [(page)]="ngbPaginationPage" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage($event)"></ngb-pagination>
         </div>
     </div>
+
 </div>

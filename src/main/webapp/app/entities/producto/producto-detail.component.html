@@ -25,6 +25,15 @@
                 <dd>
                     <span jhiTranslate="{{'mitiendaApp.EstadoProducto.' + producto.estado}}">{{producto.estado}}</span>
                 </dd>
+                <dt><span jhiTranslate="mitiendaApp.producto.image">Image</span></dt>
+                <dd>
+                    <div *ngIf="producto.image">
+                        <a (click)="openFile(producto.imageContentType!, producto.image)">
+                            <img [src]="'data:' + producto.imageContentType + ';base64,' + producto.image" style="max-width: 100%;" alt="product image"/>
+                        </a>
+                        {{producto.imageContentType}}, {{byteSize(producto.image)}}
+                    </div>
+                </dd>
                 <dt><span jhiTranslate="mitiendaApp.producto.productCategoria">Product Categoria</span></dt>
                 <dd>
                     <div *ngIf="producto.productCategoriaId">

@@ -2,14 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
 import { IProducto } from 'app/shared/model/producto.model';
-
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { ProductoService } from './producto.service';
 import { ProductoDeleteDialogComponent } from './producto-delete-dialog.component';
+import { ProductoAddDialogComponent } from './producto-add-dialog.component';
 
 @Component({
   selector: 'jhi-producto',
@@ -17,6 +16,7 @@ import { ProductoDeleteDialogComponent } from './producto-delete-dialog.componen
 })
 export class ProductoComponent implements OnInit, OnDestroy {
   productos?: IProducto[];
+  objetoprueba?: [] | any;
   eventSubscriber?: Subscription;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
@@ -31,6 +31,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
     protected productoService: ProductoService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
+    protected dataUtils: JhiDataUtils,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal
   ) {}
@@ -71,6 +72,14 @@ export class ProductoComponent implements OnInit, OnDestroy {
     return item.id!;
   }
 
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(contentType: string, base64String: string): void {
+    return this.dataUtils.openFile(contentType, base64String);
+  }
+
   registerChangeInProductos(): void {
     this.eventSubscriber = this.eventManager.subscribe('productoListModification', () => this.loadPage());
   }
@@ -78,6 +87,26 @@ export class ProductoComponent implements OnInit, OnDestroy {
   delete(producto: IProducto): void {
     const modalRef = this.modalService.open(ProductoDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.producto = producto;
+  }
+
+  add(producto: IProducto): void {
+    const modalRef = this.modalService.open(ProductoAddDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.producto = producto;
+
+    const productos = {
+      id: producto.id,
+      nombre: producto.nombre,
+      cantidad: 1
+    };
+    localStorage.setItem('productos', JSON.stringify(productos));
+    localStorage.getItem('productos');
+
+    console.warn(productos);
+  }
+
+  view(): void {
+    const carro = localStorage.getItem('productos');
+    alert(carro);
   }
 
   sort(): string[] {
